@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Maths Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍌 Banana Maths Quiz 🍌</h1>
+            <p>Solve the problem to reveal the banana!</p>
+        </header>
+
+        <div class="game-area">
+            <div class="quiz-container">
+                <div class="question-container">
+                    <div id="question-image"></div>
+                    <p id="question-text"></p>
+                </div>
+                <div class="answer-container">
+                    <input type="number" id="answer-input" placeholder="Your answer...">
+                    <button id="submit-btn">Submit</button>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="score">
+                    <span>Score: </span>
+                    <span id="score">0</span>
+                </div>
+                <div class="timer">
+                    <span>Time: </span>
+                    <span id="time">40</span>
+                </div>
+                <div class="streak">
+                    <span>Streak: </span>
+                    <span id="streak">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-container hidden">
+            <div id="result-message"></div>
+            <button id="next-btn">Next Question</button>
+        </div>
+
+        <div class="game-over hidden">
+            <h2>Game Over!</h2>
+            <p>Your final score: <span id="final-score">0</span></p>
+            <button id="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
