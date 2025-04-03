@@ -4,56 +4,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banana Maths Quiz</title>
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Load Supabase first -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your Supabase credentials
+            const SUPABASE_URL = 'https://jhmpydxwpmpyfocyvgeu.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpobXB5ZHh3cG1weWZvY3l2Z2V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2NTEwMTMsImV4cCI6MjA1OTIyNzAxM30.85-8SSowl5gXf0eGHTpDPdLlFro2AkJ0Z-GIxejn4ww';
+
+            // Validate credentials
+            if (!SUPABASE_URL || !SUPABASE_KEY) {
+                console.error('Missing Supabase credentials');
+                document.getElementById('auth-error').style.display = 'block';
+                return;
+            }
+
+            try {
+                // Initialize Supabase client
+                window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase initialized successfully');
+                
+                // Load main script after successful initialization
+                const script = document.createElement('script');
+                script.src = 'script.js';
+                document.body.appendChild(script);
+            } catch (error) {
+                console.error('Supabase initialization failed:', error);
+                document.getElementById('auth-error').style.display = 'block';
+            }
+        });
+    </script>
 </head>
 <body>
-    <div class="container">
+    <!-- Error message container (hidden by default) -->
+    <div id="auth-error" class="error-message" style="display: none;">
+        <p>⚠️ Application configuration error. Please refresh or contact support.</p>
+    </div>
+
+    <!-- Login Container -->
+    <div id="auth-container" class="auth-container">
+        <div class="auth-form">
+            <div class="logo-container">
+                <img src="Banana logo.webp" alt="Banana Maths Logo" class="logo">
+            </div>
+            
+            <h2>Welcome to Banana Maths Quiz!</h2>
+            <div id="login-form">
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                </div>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button id="login-btn" type="button">Login</button>
+                <p class="auth-link" id="show-signup">Don't have an account? Sign Up</p>
+                <p class="auth-link" id="show-forgot">Forgot Password?</p>
+            </div>
+            
+            <div id="signup-form" style="display:none">
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                </div>
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signup-username" placeholder="Username" required minlength="4">
+                </div>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="Password" required minlength="6">
+                </div>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-confirm" placeholder="Confirm Password" required minlength="6">
+                </div>
+                <button id="signup-btn" type="button">Sign Up</button>
+                <p class="auth-link" id="show-login">Already have an account? Login</p>
+            </div>
+            
+            <div id="forgot-form" style="display:none">
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="forgot-email" placeholder="Email" required>
+                </div>
+                <button id="reset-btn" type="button">Reset Password</button>
+                <p class="auth-link" id="show-login-from-forgot">Back to Login</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <div class="container hidden">
         <header>
             <h1>🍌 Banana Maths Quiz 🍌</h1>
-            <p>Solve the problem to reveal the banana!</p>
+            <div class="header-controls">
+                <p>Hello, <span id="player-name"></span>! Are you ready?</p>
+                <button id="logout-btn" type="button">Logout</button>
+            </div>
         </header>
 
-        <div class="game-area">
+        <div class="difficulty-selector">
+            <h2>Select Difficulty:</h2>
+            <div class="difficulty-buttons">
+                <button id="easy-btn" type="button">Easy</button>
+                <button id="medium-btn" type="button">Medium</button>
+                <button id="hard-btn" type="button">Hard</button>
+            </div>
+        </div>
+
+        <div class="game-area hidden">
             <div class="quiz-container">
                 <div class="question-container">
                     <div id="question-image"></div>
                     <p id="question-text"></p>
+                    <div id="hint-container" class="hidden"></div>
                 </div>
                 <div class="answer-container">
                     <input type="number" id="answer-input" placeholder="Your answer...">
-                    <button id="submit-btn">Submit</button>
+                    <button id="submit-btn" type="button">Submit</button>
                 </div>
             </div>
 
             <div class="stats-container">
-                <div class="score">
-                    <span>Score: </span>
-                    <span id="score">0</span>
+                <div class="stat-item">
+                    <span class="icon">🏆</span>
+                    <span class="label">Score:</span>
+                    <span id="score" class="value">0</span>
                 </div>
-                <div class="timer">
-                    <span>Time: </span>
-                    <span id="time">40</span>
+                <div class="stat-item">
+                    <span class="icon">⏱️</span>
+                    <span class="label">Time:</span>
+                    <span id="time" class="value">40</span>
                 </div>
-                <div class="streak">
-                    <span>Streak: </span>
-                    <span id="streak">0</span>
+                <div class="stat-item">
+                    <span class="icon">🔥</span>
+                    <span class="label">Streak:</span>
+                    <span id="streak" class="value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="icon">📊</span>
+                    <span class="label">Level:</span>
+                    <span id="current-difficulty" class="value">Easy</span>
                 </div>
             </div>
         </div>
 
         <div class="result-container hidden">
             <div id="result-message"></div>
-            <button id="next-btn">Next Question</button>
+            <button id="next-btn" type="button">Next Question</button>
         </div>
 
         <div class="game-over hidden">
             <h2>Game Over!</h2>
-            <p>Your final score: <span id="final-score">0</span></p>
-            <button id="restart-btn">Play Again</button>
+            <div class="final-stats">
+                <div class="final-stat">
+                    <span class="icon">🏆</span>
+                    <span>Final Score:</span>
+                    <span id="final-score">0</span>
+                </div>
+                <p class="greeting-message"></p>
+            </div>
+            <button id="restart-btn" type="button">Play Again</button>
         </div>
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
