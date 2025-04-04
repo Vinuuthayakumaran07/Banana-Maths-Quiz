@@ -185,7 +185,7 @@ function initGame(difficulty) {
     currentDifficulty = difficulty;
     
     // Set time based on difficulty
-    timeLeft = difficulty === 'easy' ? 50 : difficulty === 'medium' ? 30 : 30;
+    timeLeft = difficulty === 'easy' ? 40 : difficulty === 'medium' ? 30 : 20;
     
     difficultyDisplay.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
     updateStatsDisplay();
@@ -193,7 +193,7 @@ function initGame(difficulty) {
     document.querySelector('.difficulty-selector').classList.add('hidden');
     document.querySelector('.game-area').classList.remove('hidden');
     document.querySelector('.quiz-container').classList.remove('hidden');
-
+    
     gameHomeBtn.classList.remove('hidden');
     
     startTimer();
@@ -428,7 +428,7 @@ function getGreetingMessage(score) {
     return "Try Again!";
 }
 
-// ==================== LOGOUT FUNCTION ====================
+// ==================== LOGOUT FUNCTION ==================== 
 document.getElementById('logout-btn').addEventListener('click', async () => {
     try {
         await supabase.auth.signOut();
@@ -442,7 +442,7 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
     }
 });
 
-// ==================== INITIALIZATION ====================
+// ==================== INITIALIZATION ==================== 
 function handleSuccessfulLogin(username) {
     authContainer.style.display = 'none';
     mainContainer.classList.remove('hidden');
@@ -460,9 +460,8 @@ async function checkLoggedIn() {
             handleSuccessfulLogin(username);
         }
     } catch (error) {
-        console.error('Error checking login status:', error);
+        console.error('Error checking logged-in status:', error);
     }
 }
 
-// Initialize the app
 checkLoggedIn();

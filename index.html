@@ -8,16 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Load Supabase first -->
+
+    <!-- Load Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Your Supabase credentials
+        document.addEventListener('DOMContentLoaded', function () {
             const SUPABASE_URL = 'https://jhmpydxwpmpyfocyvgeu.supabase.co';
             const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpobXB5ZHh3cG1weWZvY3l2Z2V1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2NTEwMTMsImV4cCI6MjA1OTIyNzAxM30.85-8SSowl5gXf0eGHTpDPdLlFro2AkJ0Z-GIxejn4ww';
 
-            // Validate credentials
             if (!SUPABASE_URL || !SUPABASE_KEY) {
                 console.error('Missing Supabase credentials');
                 document.getElementById('auth-error').style.display = 'block';
@@ -25,11 +23,9 @@
             }
 
             try {
-                // Initialize Supabase client
                 window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                 console.log('Supabase initialized successfully');
-                
-                // Load main script after successful initialization
+
                 const script = document.createElement('script');
                 script.src = 'script.js';
                 document.body.appendChild(script);
@@ -41,7 +37,7 @@
     </script>
 </head>
 <body>
-    <!-- Error message container (hidden by default) -->
+    <!-- Error message container -->
     <div id="auth-error" class="error-message" style="display: none;">
         <p>⚠️ Application configuration error. Please refresh or contact support.</p>
     </div>
@@ -52,7 +48,7 @@
             <div class="logo-container">
                 <img src="Banana logo.webp" alt="Banana Maths Logo" class="logo">
             </div>
-            
+
             <h2>Welcome to Banana Maths Quiz!</h2>
             <div id="login-form">
                 <div class="input-with-icon">
@@ -67,7 +63,7 @@
                 <p class="auth-link" id="show-signup">Don't have an account? Sign Up</p>
                 <p class="auth-link" id="show-forgot">Forgot Password?</p>
             </div>
-            
+
             <div id="signup-form" style="display:none">
                 <div class="input-with-icon">
                     <i class="fas fa-envelope"></i>
@@ -88,7 +84,7 @@
                 <button id="signup-btn" type="button">Sign Up</button>
                 <p class="auth-link" id="show-login">Already have an account? Login</p>
             </div>
-            
+
             <div id="forgot-form" style="display:none">
                 <div class="input-with-icon">
                     <i class="fas fa-envelope"></i>
