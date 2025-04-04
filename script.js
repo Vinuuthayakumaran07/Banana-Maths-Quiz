@@ -193,7 +193,6 @@ function initGame(difficulty) {
     document.querySelector('.difficulty-selector').classList.add('hidden');
     document.querySelector('.game-area').classList.remove('hidden');
     document.querySelector('.quiz-container').classList.remove('hidden');
-
     gameHomeBtn.classList.remove('hidden');
     
     startTimer();
