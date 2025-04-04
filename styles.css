@@ -13,6 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    overflow-x: hidden;
 }
 
 /* Auth Container Styles */
@@ -27,6 +28,12 @@ body {
     text-align: center;
     z-index: 1000;
     font-weight: bold;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
 }
 
 .auth-container {
@@ -40,6 +47,31 @@ body {
     align-items: center;
     background-color: #f9f7e8;
     z-index: 2000;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.auth-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23FFD700"><path d="M50 20c-10 0-20 10-20 20 0 10 20 30 20 30s20-20 20-30c0-10-10-20-20-20zm-5 18c2 0 5 2 5 5s-2 5-5 5-5-2-5-5 3-5 5-5z"/></svg>');
+    background-size: 30px;
+    opacity: 0.1;
+    z-index: -1;
+    animation: bananaRain 100s linear infinite;
+}
+
+@keyframes bananaRain {
+    from { background-position: 0 0; }
+    to { background-position: 1000px 1000px; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .auth-form {
@@ -50,21 +82,42 @@ body {
     width: 100%;
     max-width: 400px;
     text-align: center;
+    transform-origin: center;
+    animation: scaleIn 0.6s ease-out;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 /* Header Styles */
 header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; 
+    align-items: center; 
     margin-bottom: 30px;
     width: 100%;
+    text-align: center; 
 }
 
 .header-controls {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    flex-direction: column; 
+    align-items: center; 
+    gap: 10px; 
+    margin-top: 10px; 
+}
+
+header h1 {
+    margin-bottom: 0;
+    animation: colorShift 8s infinite alternate;
+}
+
+@keyframes colorShift {
+    0% { color: #5a3d2b; }
+    50% { color: #f5a623; }
+    100% { color: #e69100; }
 }
 
 /* Logo Styles */
@@ -77,7 +130,7 @@ header {
     width: 200px;
     height: auto;
     margin-bottom: 15px;
-    animation: bounce 2s infinite;
+    animation: bounce 2s infinite, swing 4s ease-in-out infinite;
 }
 
 @keyframes bounce {
@@ -86,9 +139,15 @@ header {
     60% {transform: translateY(-10px);}
 }
 
+@keyframes swing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
 .auth-form h2 {
     color: #f5a623;
     margin-bottom: 20px;
+    animation: fadeIn 1s ease-out;
 }
 
 /* Input with icon styles */
@@ -96,6 +155,23 @@ header {
     position: relative;
     margin: 15px 0;
     width: 100%;
+    animation: floatUp 0.6s ease-out backwards;
+}
+
+.auth-form .input-with-icon:nth-child(1) { animation-delay: 0.2s; }
+.auth-form .input-with-icon:nth-child(2) { animation-delay: 0.4s; }
+.auth-form button { animation-delay: 0.6s; }
+.auth-form .auth-link { animation-delay: 0.8s; }
+
+@keyframes floatUp {
+    from { 
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .input-with-icon i {
@@ -106,6 +182,12 @@ header {
     color: #666;
     font-size: 18px;
     z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.input-with-icon:hover i {
+    color: #f5a623;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .input-with-icon input {
@@ -115,7 +197,7 @@ header {
     border-radius: 8px;
     font-size: 16px;
     background-color: #fff9e6;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, transform 0.2s ease;
     position: relative;
     z-index: 1;
 }
@@ -124,6 +206,11 @@ header {
     outline: none;
     border-color: #e69100;
     box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
+}
+
+.input-with-icon input:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 166, 35, 0.3);
 }
 
 .auth-form {
@@ -149,10 +236,19 @@ header {
     margin-top: 20px;
     width: 100%;
     transition: background-color 0.3s;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .auth-form button:hover {
     background-color: #e69100;
+    animation: none;
+    transform: scale(1.05);
 }
 
 .auth-link {
@@ -160,11 +256,19 @@ header {
     margin-top: 15px;
     cursor: pointer;
     font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .auth-link:hover {
     text-decoration: underline;
     color: #f5a623;
+    transform: translateX(5px);
+}
+
+/* Form transition effects */
+#login-form, #signup-form, #forgot-form {
+    transition: all 0.4s ease-out;
 }
 
 /* Main Game Container */
@@ -173,22 +277,13 @@ header {
     width: 100%;
     padding: 20px;
     text-align: center;
-}
-
-header {
-    margin-bottom: 30px;
-}
-
-header h1 {
-    font-size: 2.5rem;
-    color: #ffa500;
-    text-shadow: 2px 2px 0 #5a3d2b;
-    margin-bottom: 10px;
+    animation: fadeIn 0.8s ease-out;
 }
 
 #player-name {
     font-weight: bold;
     color: #f5a623;
+    animation: colorShift 8s infinite alternate;
 }
 
 #logout-btn {
@@ -204,6 +299,7 @@ header h1 {
 
 #logout-btn:hover {
     background-color: #c0392b;
+    transform: scale(1.05);
 }
 
 .difficulty-selector {
@@ -225,11 +321,16 @@ header h1 {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     border: none;
+    animation: floatUp 0.5s ease-out backwards;
 }
 
+.difficulty-buttons button:nth-child(1) { animation-delay: 0.1s; }
+.difficulty-buttons button:nth-child(2) { animation-delay: 0.2s; }
+.difficulty-buttons button:nth-child(3) { animation-delay: 0.3s; }
+
 .difficulty-buttons button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 #easy-btn {
@@ -252,6 +353,12 @@ header h1 {
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .quiz-container {
@@ -273,6 +380,13 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: popIn 0.5s ease-out;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 #question-image img {
@@ -280,12 +394,18 @@ header h1 {
     max-height: 200px;
     border-radius: 8px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#question-image img:hover {
+    transform: scale(1.03);
 }
 
 #question-text {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 10px;
+    animation: fadeIn 0.8s ease-out;
 }
 
 #hint-container {
@@ -296,6 +416,7 @@ header h1 {
     font-style: italic;
     max-width: 80%;
     text-align: center;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .answer-container {
@@ -312,6 +433,19 @@ header h1 {
     border: 2px solid #ffa500;
     border-radius: 5px;
     text-align: center;
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+#answer-input:focus {
+    border-color: #e69100;
+    box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
+    transform: scale(1.05);
 }
 
 button {
@@ -322,11 +456,36 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
 }
 
 button:hover {
     background-color: #e69500;
+    transform: scale(1.05);
+}
+
+#game-home-btn {
+    background-color: #020265;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#game-home-btn:hover {
+    background-color: #c2670b;
+    transform: scale(1.05);
+}
+
+.answer-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .stats-container {
@@ -337,6 +496,7 @@ button:hover {
     padding: 15px;
     background-color: #f5f5dc;
     border-radius: 10px;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .stat-item {
@@ -345,6 +505,11 @@ button:hover {
     gap: 5px;
     font-size: 1.1rem;
     justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: scale(1.05);
 }
 
 .icon {
@@ -358,6 +523,12 @@ button:hover {
 .value {
     min-width: 30px;
     text-align: center;
+    transition: all 0.3s ease;
+}
+
+.value:hover {
+    color: #f5a623;
+    transform: scale(1.2);
 }
 
 .result-container {
@@ -365,6 +536,7 @@ button:hover {
     padding: 20px;
     background-color: #f5f5dc;
     border-radius: 10px;
+    animation: popIn 0.5s ease-out;
 }
 
 #result-message {
@@ -374,19 +546,47 @@ button:hover {
 }
 
 .game-over {
-    margin-top: 20px;
-    padding: 30px;
-    background-color: #f5f5dc;
-    border-radius: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
 }
 
-.game-over h2 {
-    color: #ffa500;
-    margin-bottom: 15px;
+.game-over-dialog {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); }
+    80% { transform: scale(0.95); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.game-over-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .final-stats {
     margin: 20px 0;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .final-stat {
@@ -402,6 +602,13 @@ button:hover {
     font-size: 1.2em;
     margin: 20px 0;
     color: #2ecc71;
+    animation: colorPulse 2s infinite;
+}
+
+@keyframes colorPulse {
+    0% { color: #2ecc71; }
+    50% { color: #f5a623; }
+    100% { color: #2ecc71; }
 }
 
 #logout-btn {
@@ -419,10 +626,24 @@ button:hover {
 
 .correct {
     color: #2e8b57;
+    animation: celebrate 0.5s ease-out;
+}
+
+@keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1); }
 }
 
 .incorrect {
     color: #dc143c;
+    animation: shake 0.5s ease-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
 }
 
 @media (max-width: 600px) {
@@ -451,5 +672,13 @@ button:hover {
     
     #answer-input {
         width: 120px;
+    }
+
+    .auth-form {
+        padding: 20px 15px;
+    }
+
+    .logo {
+        width: 150px;
     }
 }
