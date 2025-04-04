@@ -9,6 +9,7 @@ let currentDifficulty = 'easy';
 let hintInterval;
 
 // DOM elements
+const gameHomeBtn = document.getElementById('game-home-btn');
 const authContainer = document.getElementById('auth-container');
 const mainContainer = document.querySelector('.container');
 const loginForm = document.getElementById('login-form');
@@ -42,7 +43,7 @@ document.getElementById('show-login').addEventListener('click', () => toggleForm
 document.getElementById('show-forgot').addEventListener('click', () => toggleForms(loginForm, forgotForm));
 document.getElementById('show-login-from-forgot').addEventListener('click', () => toggleForms(forgotForm, loginForm));
 
-// Signup function - updated to use only Auth
+// Signup function
 document.getElementById('signup-btn').addEventListener('click', async () => {
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value.trim();
@@ -143,7 +144,6 @@ document.getElementById('login-btn').addEventListener('click', async () => {
             return;
         }
         
-        // Get username from user metadata
         const username = data.user.user_metadata?.username || email.split('@')[0];
         localStorage.setItem('currentUser', username);
         handleSuccessfulLogin(username);
@@ -185,7 +185,7 @@ function initGame(difficulty) {
     currentDifficulty = difficulty;
     
     // Set time based on difficulty
-    timeLeft = difficulty === 'easy' ? 40 : difficulty === 'medium' ? 20 : 10;
+    timeLeft = difficulty === 'easy' ? 40 : difficulty === 'medium' ? 30 : 20;
     
     difficultyDisplay.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
     updateStatsDisplay();
@@ -193,6 +193,8 @@ function initGame(difficulty) {
     document.querySelector('.difficulty-selector').classList.add('hidden');
     document.querySelector('.game-area').classList.remove('hidden');
     document.querySelector('.quiz-container').classList.remove('hidden');
+
+    gameHomeBtn.classList.remove('hidden');
     
     startTimer();
     fetchQuestion();
@@ -219,6 +221,7 @@ document.getElementById('hard-btn').addEventListener('click', () => initGame('ha
 
 // Game event listeners
 submitBtn.addEventListener('click', checkAnswer);
+gameHomeBtn.addEventListener('click', returnToHome);
 nextBtn.addEventListener('click', nextQuestion);
 restartBtn.addEventListener('click', showDifficultySelector);
 answerInput.addEventListener('keypress', function(e) {
@@ -228,6 +231,18 @@ answerInput.addEventListener('keypress', function(e) {
 function showDifficultySelector() {
     document.querySelector('.difficulty-selector').classList.remove('hidden');
     document.querySelector('.game-over').classList.add('hidden');
+}
+
+function returnToHome() {
+    clearGameIntervals();
+    resetGameState();
+    
+    document.querySelector('.difficulty-selector').classList.remove('hidden');
+    document.querySelector('.game-area').classList.add('hidden');
+    document.querySelector('.result-container').classList.add('hidden');
+    document.querySelector('.game-over').classList.add('hidden');
+    
+    gameHomeBtn.classList.add('hidden');
 }
 
 function startTimer() {
